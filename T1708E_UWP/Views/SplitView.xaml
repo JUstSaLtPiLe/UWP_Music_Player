@@ -1,0 +1,66 @@
+﻿<Page
+    x:Class="T1708E_UWP.Views.SplitView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:T1708E_UWP.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <SplitView x:Name="MySplitView" IsPaneOpen="False" DisplayMode="CompactOverlay" CompactPaneLength="50" OpenPaneLength="250">
+            <SplitView.Pane>
+                <StackPanel x:Name="StackIcon" Margin="10, 50, 0, 0">
+                    <RadioButton Tag="Register" Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10" Click="RadioButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="Home" Margin="0, 0, 15, 0"/>
+                            <TextBlock Text="Home" Margin="0, 3, 0, 0"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="AddFriend" Margin="0, 0, 15, 0"/>
+                            <TextBlock Text="Register" Margin="0, 3, 0, 0"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="Contact" Margin="0, 0, 15, 0"/>
+                            <TextBlock Text="My Account" Margin="0, 3, 0, 0"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Tag="CreateSong" Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10" Click="RadioButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="Audio" Margin="0, 0, 15, 0"/>
+                            <TextBlock Text="My Song" Margin="0, 3, 0, 0"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="Caption" Margin="0, 0, 15, 0"/>
+                            <TextBlock Text="Another Page" Margin="0, 3, 0, 0"/>
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Frame x:Name="MainFrame">
+                    <StackPanel Orientation="Horizontal">
+                        <ListView x:Name="ListViewControl" Header="My Music" FontSize="48px" Margin="30, 30, 0, 30">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="0,1,0,0" BorderBrush="Black">
+                                        <TextBlock Height="100" Width="100" Text="{Binding}"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackPanel>
+                </Frame>
+            </SplitView.Content>
+        </SplitView>
+        <Button Click="Button_Click" VerticalAlignment="Top" Margin="4, 4, 0, 0">
+            <SymbolIcon Symbol="GlobalNavigationButton"/>
+        </Button>
+    </Grid>
+</Page>
