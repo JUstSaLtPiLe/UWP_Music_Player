@@ -5,10 +5,11 @@
     xmlns:local="using:T1708E_UWP.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:entity="using:T1708E_UWP.Entity"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid>
-        <SplitView x:Name="MySplitView" IsPaneOpen="False" DisplayMode="CompactOverlay" CompactPaneLength="50" OpenPaneLength="250">
+        <SplitView x:Name="MySplitView" IsPaneOpen="False" DisplayMode="CompactOverlay" CompactPaneLength="50" OpenPaneLength="250" Loaded="OnActiveAsync">
             <SplitView.Pane>
                 <StackPanel x:Name="StackIcon" Margin="10, 50, 0, 0">
                     <RadioButton Tag="Register" Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10" Click="RadioButton_Click">
@@ -39,23 +40,54 @@
                         <StackPanel Orientation="Horizontal">
                             <SymbolIcon Symbol="Caption" Margin="0, 0, 15, 0"/>
                             <TextBlock Text="Another Page" Margin="0, 3, 0, 0"/>
+                            <MediaElement Name="myMediaElement" AutoPlay="True" MediaOpened="Element_MediaOpened" MediaEnded="Element_MediaEnded"/>
                         </StackPanel>
                     </RadioButton>
                 </StackPanel>
             </SplitView.Pane>
             <SplitView.Content>
                 <Frame x:Name="MainFrame">
-                    <StackPanel Orientation="Horizontal">
-                        <ListView x:Name="ListViewControl" Header="My Music" FontSize="48px" Margin="30, 30, 0, 30">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Border BorderThickness="0,1,0,0" BorderBrush="Black">
-                                        <TextBlock Height="100" Width="100" Text="{Binding}"/>
-                                    </Border>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackPanel>
+                    <Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+                            <ListView x:Name="MusicView" ItemsSource="{x:Bind ListSongs, Mode=TwoWay}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Header="My Music" FontSize="48px" Margin="0, 30, 0, 30">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="entity:Song">
+                                        <StackPanel Orientation="Horizontal" Tag="{Binding}" PointerEntered="ShowButton" Height="150" PointerExited="HideButton" Tapped="PlayCurrentSong" Background="AliceBlue">
+                                            <Image Source="{x:Bind thumbnail}" Width="200" x:Name="SongThumbnail"/>
+                                            <TextBlock Text="{x:Bind name}" x:Name="SongName" VerticalAlignment="Center" Margin="30,30,0,30"/>
+                                            <AppBarButton Margin="30,50,0,30"  Icon="Play" Label="Play" Click="PlayButton_Click_1" Visibility="Collapsed"/>
+                                            <TextBlock Text="{x:Bind author}" x:Name="SongAuthor"  HorizontalTextAlignment="Left" VerticalAlignment="Center" Margin="30,30,0,30"/>
+                                            <TextBlock Text="{x:Bind singer}" x:Name="SongSinger"  HorizontalTextAlignment="Left" VerticalAlignment="Center" Margin="30,30,0,30"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                                        <Setter Property="Margin" Value="0,20,0,0"/>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Grid>
+                        <TextBlock x:Name="TimerLog" Width="300" Height="200"/>
+                        <CommandBar VerticalAlignment="Bottom" IsDynamicOverflowEnabled="False" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                            <AppBarSeparator/>
+                            <AppBarButton Icon="Previous" Label="Previous" Click="OnMouseDownPauseMedia" />
+                            <AppBarButton  Icon="Play" Label="Stop" Click="PlayButton_Click" x:Name="PlayButton"/>
+                            <AppBarButton Icon="Next" Label="Next" Click="OnMouseDownStopMedia"/>
+                            <CommandBar.Content>
+                                <StackPanel>
+                                    <Slider Name="timelineSlider" ToolTipService.ToolTip="aaaaaaa" ValueChanged="SeekToMediaPosition" Margin="50,5,0,50" />
+                                </StackPanel>
+                            </CommandBar.Content>
+                        </CommandBar>
+                    </Grid>
+
                 </Frame>
             </SplitView.Content>
         </SplitView>
