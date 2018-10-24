@@ -5,22 +5,22 @@
     xmlns:local="using:T1708E_UWP.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:entity="using:T1708E_UWP.Entity"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Grid Loaded="OnActiveAsync">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="5*"/>
             </Grid.ColumnDefinitions>
-            <ListView x:Name="MusicView" ItemsSource="{x:Bind ListSongs, Mode=TwoWay}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Header="My Music" FontSize="48px" Margin="30, 30, 0, 30">
+            <ListView SelectionChanged="MusicView_SelectionChanged" x:Name="MusicView" ItemsSource="{x:Bind ListSongs, Mode=TwoWay}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Header="My Music" FontSize="48px" Margin="30, 30, 0, 30">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="entity:Song">
-                        <StackPanel Orientation="Horizontal" Tag="{Binding}" PointerEntered="ShowButton" Height="150" PointerExited="HideButton" Tapped="PlayCurrentSong" Background="AliceBlue">
+                        <StackPanel Orientation="Horizontal" Tag="{Binding}" Height="150" Tapped="PlayCurrentSong" Background="AliceBlue">
                             <Image Source="{x:Bind thumbnail}" Width="200" x:Name="SongThumbnail"/>
                             <TextBlock Text="{x:Bind name}" x:Name="SongName" VerticalAlignment="Center" Margin="30,30,0,30"/>
-                            <!--<AppBarButton Margin="30,50,0,30"  Icon="Play" Label="Play" Click="PlayButton_Click_1" Tag="{Binding}" Visibility="Collapsed"/>-->
                             <TextBlock Text="{x:Bind author}" x:Name="SongAuthor"  HorizontalTextAlignment="Left" VerticalAlignment="Center" Margin="30,30,0,30"/>
                             <TextBlock Text="{x:Bind singer}" x:Name="SongSinger"  HorizontalTextAlignment="Left" VerticalAlignment="Center" Margin="30,30,0,30"/>
                         </StackPanel>
@@ -35,26 +35,35 @@
                 </ListView.ItemContainerStyle>
             </ListView>
         </Grid>
-        <!--<MediaElement Width="400" Height="100" Source="{Binding SelectedItem.link, ElementName=MusicView}" 
-                          AreTransportControlsEnabled="True">
-                            <MediaElement.TransportControls>
-                                <MediaTransportControls IsPreviousTrackButtonVisible="True" 
-                                            IsNextTrackButtonVisible="True" 
-                                            IsFastForwardButtonVisible="True"
-                                            IsFastForwardEnabled="True"/>
-                            </MediaElement.TransportControls>
-                        </MediaElement>-->
-        <TextBlock x:Name="TimerLog" Width="300" Height="200"/>
         <CommandBar VerticalAlignment="Bottom" IsDynamicOverflowEnabled="False" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
             <AppBarSeparator/>
+            <AppBarToggleButton Icon="Shuffle" x:Name="shuffle_btn" Label="Shuffle" ClickMode="Press" Checked="shuffle_btn_Checked" Unchecked="shuffle_btn_Unchecked"/>
             <AppBarButton Icon="Previous" Label="Previous" Click="OnMouseDownPreviousMedia" />
             <AppBarButton  Icon="Play" Label="Stop" Click="PlayButton_Click" x:Name="PlayButton"/>
             <AppBarButton Icon="Next" Label="Next" Click="OnMouseDownNextMedia"/>
+            <AppBarButton Icon="RepeatOne" Label="Shuffle" Click="Repeat_Click" />
             <CommandBar.Content>
-                <StackPanel>
-                    <Slider Name="timelineSlider" ValueChanged="SeekToMediaPosition" Margin="50,5,0,50" />
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="current_runtime" Visibility="Collapsed" Grid.Column="0" HorizontalAlignment="Center" Margin="0,15,0,15"/>
+                    <Slider Name="timelineSlider" Grid.Column="1" Grid.ColumnSpan="1" Margin="0,7,0,7" ValueChanged="SeekToMediaPosition"/>
+                    <TextBlock x:Name="duration" Visibility="Collapsed" Grid.Column="2" HorizontalAlignment="Center" Margin="0,15,0,15"/>
+                    <Grid Grid.Column="3" Grid.ColumnSpan="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
+                        <SymbolIcon Symbol="Volume" Grid.Column="0" Margin="0,0,0,9"/>
+                        <Slider Name="volumeSlider" Grid.Column="1" ValueChanged="ChangeMediaVolume" Margin="10,5,10,5" Minimum="0" Maximum="100" StepFrequency="1.00"/>
+                    </Grid>
+                </Grid>
             </CommandBar.Content>
         </CommandBar>
+        <MediaElement Name="myMediaElement" AutoPlay="True" MediaOpened="Element_MediaOpened" MediaEnded="Element_MediaEnded"/>
     </Grid>
 </Page>

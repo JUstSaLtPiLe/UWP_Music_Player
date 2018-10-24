@@ -30,7 +30,6 @@ namespace T1708E_UWP.Views
         {
             this.currentSong = new Song();
             this.InitializeComponent();
-            this.Player.MediaPlayer.Play();
         }
 
         private async void BtnSignup_Click_1(object sender, RoutedEventArgs e)

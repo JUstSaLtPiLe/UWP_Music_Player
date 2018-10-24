@@ -33,6 +33,27 @@ namespace T1708E_UWP.Views
             this.InitializeComponent();
         }
 
+        private async void LoginForm_Loaded(object sender, RoutedEventArgs e)
+        {
+            string rootPath = ApplicationData.Current.LocalFolder.Path;
+            string filePath = Path.Combine(rootPath, "loginStatus.txt");
+            if (!System.IO.File.Exists(filePath))
+            {
+                
+            }
+            else
+            {
+                StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+                StorageFile file_loginStatus = await storageFolder.GetFileAsync("loginStatus.txt");
+                string loginStatus = await Windows.Storage.FileIO.ReadTextAsync(file_loginStatus);
+                if (loginStatus == "loggedIn")
+                {
+                    this.Frame.Navigate(typeof(SplitView));
+                }
+            }
+            
+        }
+
         private async void BtnLogin_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<String, String> LoginInfor = new Dictionary<string, string>();
@@ -52,8 +73,10 @@ namespace T1708E_UWP.Views
 
                 // Luu token
                 StorageFolder folder =  ApplicationData.Current.LocalFolder;
-                StorageFile file = await folder.CreateFileAsync("token.txt", CreationCollisionOption.ReplaceExisting);
-                await FileIO.WriteTextAsync(file, responseContent);
+                StorageFile file_token = await folder.CreateFileAsync("token.txt", CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteTextAsync(file_token, responseContent);
+                StorageFile file_loginStatus = await folder.CreateFileAsync("loginStatus.txt", CreationCollisionOption.ReplaceExisting);
+                await FileIO.WriteTextAsync(file_loginStatus, "loggedIn");
                 this.Frame.Navigate(typeof(SplitView));
 
                 //// Lay thong tin ca nhan bang token.

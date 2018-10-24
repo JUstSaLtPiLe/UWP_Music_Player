@@ -8,14 +8,23 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel>
-        <TextBox x:Name="Email" Header="Email" Width="500" Margin="0, 200, 0 ,0"/>
-        <TextBlock x:Name="email" Foreground="Red" Visibility="Collapsed"/>
-        <PasswordBox x:Name="Password" Header="Password" Width="500"/>
-        <TextBlock x:Name="password" Foreground="Red" Visibility="Collapsed"/>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="BtnLogin" Margin="0, 20, 0, 0" Content="Login" Click="BtnLogin_Click" Width="100"/>
-            <Button x:Name="BtnRegister" Margin="40, 20, 0, 0" Content="Register" Click="BtnRegister_Click" Width="100"/>
+    <Grid>
+        <StackPanel Loaded="LoginForm_Loaded" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="30">
+            <TextBlock Text="Welcome to UWP Music App" FontSize="54" Margin="30"/>
+            <TextBox x:Name="Email" Header="Email" Width="500" />
+            <TextBlock x:Name="email" Foreground="Red" Visibility="Collapsed"/>
+            <PasswordBox x:Name="Password" Header="Password" Width="500"/>
+            <TextBlock x:Name="password" Foreground="Red" Visibility="Collapsed"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="BtnLogin" Margin="0, 30, 0, 0" Content="Login" Click="BtnLogin_Click" Width="100"/>
+                <Button x:Name="BtnRegister" Margin="40, 30, 0, 0" Content="Register" Click="BtnRegister_Click" Width="100"/>
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="AliceBlue" Offset="0"/>
+                <GradientStop Color="DeepSkyBlue" Offset="2"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+    </Grid>
 </Page>

@@ -16,9 +16,10 @@
             <TextBox x:Name="Author" Margin="0, 30, 0, 0" Header="Author" HorizontalAlignment="Left" Text="" VerticalAlignment="Top" Width="293"/>
             <TextBox x:Name="Link" Margin="0, 30, 0, 0" Header="Link" HorizontalAlignment="Left" Text="" VerticalAlignment="Top" Width="293"/>
             <TextBox x:Name="Thumbnail" Margin="0, 30, 0, 0" Header="Thumbnail" HorizontalAlignment="Left" Text="" VerticalAlignment="Top" Width="293"/>
-            <Button x:Name="BtnSignup" Margin="0, 30, 0, 0" Content="Sign Up" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnSignup_Click_1"/>
-            <Button x:Name="BtnReset" Margin="0, 30, 0, 0" Content="Reset" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <MediaPlayerElement Source="https://od.lk/s/NjFfMjM4MzQ1OThf/ThangTuLaLoiNoiDoiCuaEm-HaAnhTuan-4609544.mp3" x:Name="Player"/> 
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="BtnSignup" Margin="30, 30, 0, 0" Content="Upload" HorizontalAlignment="Left" Width="100" VerticalAlignment="Top" Click="BtnSignup_Click_1"/>
+                <Button x:Name="BtnReset" Margin="30, 30, 0, 0" Content="Reset" HorizontalAlignment="Left" Width="100" VerticalAlignment="Top"/>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer>
 </Page>
