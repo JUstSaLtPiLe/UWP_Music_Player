@@ -9,9 +9,52 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <Button x:Name="ClickMe" Content="CLick" Click="ClickMe_Click"/>
-        <Button x:Name="Play" Content="Music" Margin="200, 200, 200, 200" Click="mediaPlayer_Click"/>
-        <MediaPlayerElement x:Name="mediaSimple"
-                    Width="400" AutoPlay="True"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <ListView x:Name="MusicView" ItemsSource="{x:Bind ListSongs, Mode=TwoWay}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Header="My Music" FontSize="48px" Margin="30, 30, 0, 30">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="entity:Song">
+                        <StackPanel Orientation="Horizontal" Tag="{Binding}" PointerEntered="ShowButton" Height="150" PointerExited="HideButton" Tapped="PlayCurrentSong" Background="AliceBlue">
+                            <Image Source="{x:Bind thumbnail}" Width="200" x:Name="SongThumbnail"/>
+                            <TextBlock Text="{x:Bind name}" x:Name="SongName" VerticalAlignment="Center" Margin="30,30,0,30"/>
+                            <!--<AppBarButton Margin="30,50,0,30"  Icon="Play" Label="Play" Click="PlayButton_Click_1" Tag="{Binding}" Visibility="Collapsed"/>-->
+                            <TextBlock Text="{x:Bind author}" x:Name="SongAuthor"  HorizontalTextAlignment="Left" VerticalAlignment="Center" Margin="30,30,0,30"/>
+                            <TextBlock Text="{x:Bind singer}" x:Name="SongSinger"  HorizontalTextAlignment="Left" VerticalAlignment="Center" Margin="30,30,0,30"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                        <Setter Property="Margin" Value="0,20,0,0"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </Grid>
+        <!--<MediaElement Width="400" Height="100" Source="{Binding SelectedItem.link, ElementName=MusicView}" 
+                          AreTransportControlsEnabled="True">
+                            <MediaElement.TransportControls>
+                                <MediaTransportControls IsPreviousTrackButtonVisible="True" 
+                                            IsNextTrackButtonVisible="True" 
+                                            IsFastForwardButtonVisible="True"
+                                            IsFastForwardEnabled="True"/>
+                            </MediaElement.TransportControls>
+                        </MediaElement>-->
+        <TextBlock x:Name="TimerLog" Width="300" Height="200"/>
+        <CommandBar VerticalAlignment="Bottom" IsDynamicOverflowEnabled="False" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <AppBarSeparator/>
+            <AppBarButton Icon="Previous" Label="Previous" Click="OnMouseDownPreviousMedia" />
+            <AppBarButton  Icon="Play" Label="Stop" Click="PlayButton_Click" x:Name="PlayButton"/>
+            <AppBarButton Icon="Next" Label="Next" Click="OnMouseDownNextMedia"/>
+            <CommandBar.Content>
+                <StackPanel>
+                    <Slider Name="timelineSlider" ValueChanged="SeekToMediaPosition" Margin="50,5,0,50" />
+                </StackPanel>
+            </CommandBar.Content>
+        </CommandBar>
     </Grid>
 </Page>

@@ -9,22 +9,23 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Grid>
-        <SplitView x:Name="MySplitView" IsPaneOpen="False" DisplayMode="CompactOverlay" CompactPaneLength="50" OpenPaneLength="250" Loaded="OnActiveAsync">
+        <SplitView x:Name="MySplitView" IsPaneOpen="False" DisplayMode="CompactOverlay" CompactPaneLength="50" OpenPaneLength="350" Loaded="OnActiveAsync">
             <SplitView.Pane>
                 <StackPanel x:Name="StackIcon" Margin="10, 50, 0, 0">
-                    <RadioButton Tag="Register" Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10" Click="RadioButton_Click">
+                    
+                    <RadioButton Tag="Search" Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 0">
+                        <StackPanel Orientation="Horizontal">
+                            <SymbolIcon Symbol="Find" Margin="0, 0, 15, 0"/>
+                            <AutoSuggestBox PlaceholderText="Search..." QueryIcon="Find" Width="200" Margin="0, 3, 0, 0"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Tag="Home" Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10" Click="RadioButton_Click">
                         <StackPanel Orientation="Horizontal">
                             <SymbolIcon Symbol="Home" Margin="0, 0, 15, 0"/>
                             <TextBlock Text="Home" Margin="0, 3, 0, 0"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10">
-                        <StackPanel Orientation="Horizontal">
-                            <SymbolIcon Symbol="AddFriend" Margin="0, 0, 15, 0"/>
-                            <TextBlock Text="Register" Margin="0, 3, 0, 0"/>
-                        </StackPanel>
-                    </RadioButton>
-                    <RadioButton Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10">
+                    <RadioButton Tag="Account" Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10">
                         <StackPanel Orientation="Horizontal">
                             <SymbolIcon Symbol="Contact" Margin="0, 0, 15, 0"/>
                             <TextBlock Text="My Account" Margin="0, 3, 0, 0"/>
@@ -33,16 +34,10 @@
                     <RadioButton Tag="CreateSong" Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10" Click="RadioButton_Click">
                         <StackPanel Orientation="Horizontal">
                             <SymbolIcon Symbol="Audio" Margin="0, 0, 15, 0"/>
-                            <TextBlock Text="My Song" Margin="0, 3, 0, 0"/>
+                            <TextBlock Text="Add Song" Margin="0, 3, 0, 0"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{ThemeResource TextBlockButtonStyle}" Margin="0, 0, 0, 10">
-                        <StackPanel Orientation="Horizontal">
-                            <SymbolIcon Symbol="Caption" Margin="0, 0, 15, 0"/>
-                            <TextBlock Text="Another Page" Margin="0, 3, 0, 0"/>
-                            <MediaElement Name="myMediaElement" AutoPlay="True" MediaOpened="Element_MediaOpened" MediaEnded="Element_MediaEnded"/>
-                        </StackPanel>
-                    </RadioButton>
+                    <MediaElement Name="myMediaElement" AutoPlay="True" MediaOpened="Element_MediaOpened" MediaEnded="Element_MediaEnded"/>
                 </StackPanel>
             </SplitView.Pane>
             <SplitView.Content>
@@ -53,13 +48,13 @@
                                 <ColumnDefinition Width="3*"/>
                                 <ColumnDefinition Width="5*"/>
                             </Grid.ColumnDefinitions>
-                            <ListView x:Name="MusicView" ItemsSource="{x:Bind ListSongs, Mode=TwoWay}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Header="My Music" FontSize="48px" Margin="0, 30, 0, 30">
+                            <ListView x:Name="MusicView" ItemsSource="{x:Bind ListSongs, Mode=TwoWay}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Header="My Music" FontSize="48px" Margin="30, 30, 0, 30">
                                 <ListView.ItemTemplate>
                                     <DataTemplate x:DataType="entity:Song">
                                         <StackPanel Orientation="Horizontal" Tag="{Binding}" PointerEntered="ShowButton" Height="150" PointerExited="HideButton" Tapped="PlayCurrentSong" Background="AliceBlue">
                                             <Image Source="{x:Bind thumbnail}" Width="200" x:Name="SongThumbnail"/>
                                             <TextBlock Text="{x:Bind name}" x:Name="SongName" VerticalAlignment="Center" Margin="30,30,0,30"/>
-                                            <AppBarButton Margin="30,50,0,30"  Icon="Play" Label="Play" Click="PlayButton_Click_1" Visibility="Collapsed"/>
+                                            <!--<AppBarButton Margin="30,50,0,30"  Icon="Play" Label="Play" Click="PlayButton_Click_1" Tag="{Binding}" Visibility="Collapsed"/>-->
                                             <TextBlock Text="{x:Bind author}" x:Name="SongAuthor"  HorizontalTextAlignment="Left" VerticalAlignment="Center" Margin="30,30,0,30"/>
                                             <TextBlock Text="{x:Bind singer}" x:Name="SongSinger"  HorizontalTextAlignment="Left" VerticalAlignment="Center" Margin="30,30,0,30"/>
                                         </StackPanel>
@@ -74,20 +69,28 @@
                                 </ListView.ItemContainerStyle>
                             </ListView>
                         </Grid>
+                        <!--<MediaElement Width="400" Height="100" Source="{Binding SelectedItem.link, ElementName=MusicView}" 
+                          AreTransportControlsEnabled="True">
+                            <MediaElement.TransportControls>
+                                <MediaTransportControls IsPreviousTrackButtonVisible="True" 
+                                            IsNextTrackButtonVisible="True" 
+                                            IsFastForwardButtonVisible="True"
+                                            IsFastForwardEnabled="True"/>
+                            </MediaElement.TransportControls>
+                        </MediaElement>-->
                         <TextBlock x:Name="TimerLog" Width="300" Height="200"/>
                         <CommandBar VerticalAlignment="Bottom" IsDynamicOverflowEnabled="False" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                             <AppBarSeparator/>
-                            <AppBarButton Icon="Previous" Label="Previous" Click="OnMouseDownPauseMedia" />
+                            <AppBarButton Icon="Previous" Label="Previous" Click="OnMouseDownPreviousMedia" />
                             <AppBarButton  Icon="Play" Label="Stop" Click="PlayButton_Click" x:Name="PlayButton"/>
-                            <AppBarButton Icon="Next" Label="Next" Click="OnMouseDownStopMedia"/>
+                            <AppBarButton Icon="Next" Label="Next" Click="OnMouseDownNextMedia"/>
                             <CommandBar.Content>
                                 <StackPanel>
-                                    <Slider Name="timelineSlider" ToolTipService.ToolTip="aaaaaaa" ValueChanged="SeekToMediaPosition" Margin="50,5,0,50" />
+                                    <Slider Name="timelineSlider" ValueChanged="SeekToMediaPosition" Margin="50,5,0,50" />
                                 </StackPanel>
                             </CommandBar.Content>
                         </CommandBar>
                     </Grid>
-
                 </Frame>
             </SplitView.Content>
         </SplitView>
