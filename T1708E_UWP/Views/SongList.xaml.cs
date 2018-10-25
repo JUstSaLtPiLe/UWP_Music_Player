@@ -210,39 +210,50 @@ namespace T1708E_UWP.Views
 
         private void OnMouseDownPreviousMedia(object sender, RoutedEventArgs e)
         {
-                if (_currentIndex != 0 && shuffle == "shuffle")
+            if (_currentIndex != 0 && shuffle == "shuffle")
+            {
+                this.myMediaElement.Stop();
+                int lastIndex = played_songs.LastIndexOf(shuffle_index) - 1;
+                int previousIndex;
+                if (lastIndex < 0)
                 {
-                    this.myMediaElement.Stop();
-                    Uri songLink = new Uri(ListSongs[0].link);
-                    this.MusicView.SelectedIndex = 0;
-                    int lastIndex = played_songs[played_songs.LastIndexOf(previous_shuffle_index) - 1];
-                    previous_shuffle_index = lastIndex;
-                Debug.WriteLine(previous_shuffle_index + " " + lastIndex);
+                    Uri songLink = new Uri(ListSongs[previousIndex].link);
                     this.myMediaElement.Source = songLink;
-                    OnMouseDownPlayMedia();
-                    PlayButton.Icon = new SymbolIcon(Symbol.Pause);
-                }
-                else if (_currentIndex == 0)
-                {
-                    this.myMediaElement.Stop();
-                    Uri songLink = new Uri(ListSongs[ListSongs.Count - 1].link);
-                    this.myMediaElement.Source = songLink;
-                    OnMouseDownPlayMedia();
-                    PlayButton.Icon = new SymbolIcon(Symbol.Pause);
-                    _currentIndex = ListSongs.Count - 1;
-                    this.MusicView.SelectedIndex = _currentIndex;
+                    this.MusicView.SelectedIndex = previousIndex;
+                    shuffle_index = previousIndex;
                 }
                 else
                 {
-                    this.myMediaElement.Stop();
-                    Uri songLink = new Uri(ListSongs[_currentIndex - 1].link);
+                    previousIndex = played_songs[lastIndex];
+                    Uri songLink = new Uri(ListSongs[previousIndex].link);
+                    shuffle_index = previousIndex;
                     this.myMediaElement.Source = songLink;
-                    OnMouseDownPlayMedia();
-                    PlayButton.Icon = new SymbolIcon(Symbol.Pause);
-                    _currentIndex = _currentIndex - 1;
-                    this.MusicView.SelectedIndex = _currentIndex;
-
+                    this.MusicView.SelectedIndex = shuffle_index;
                 }
+                OnMouseDownPlayMedia();
+                PlayButton.Icon = new SymbolIcon(Symbol.Pause);
+            }
+            else if (_currentIndex == 0)
+            {
+                this.myMediaElement.Stop();
+                Uri songLink = new Uri(ListSongs[ListSongs.Count - 1].link);
+                this.myMediaElement.Source = songLink;
+                OnMouseDownPlayMedia();
+                PlayButton.Icon = new SymbolIcon(Symbol.Pause);
+                _currentIndex = ListSongs.Count - 1;
+                this.MusicView.SelectedIndex = _currentIndex;
+            }
+            else
+            {
+                this.myMediaElement.Stop();
+                Uri songLink = new Uri(ListSongs[_currentIndex - 1].link);
+                this.myMediaElement.Source = songLink;
+                OnMouseDownPlayMedia();
+                PlayButton.Icon = new SymbolIcon(Symbol.Pause);
+                _currentIndex = _currentIndex - 1;
+                this.MusicView.SelectedIndex = _currentIndex;
+
+            }
         }
 
         private void OnMouseDownNextMedia(object sender, RoutedEventArgs e)
@@ -261,10 +272,10 @@ namespace T1708E_UWP.Views
                 _currentIndex = shuffle_index;
                 OnMouseDownPlayMedia();
                 this.MusicView.SelectedIndex = _currentIndex;
-                foreach(int i in played_songs)
-                {
-                    Debug.WriteLine(i);
-                }
+                //foreach(int i in played_songs)
+                //{
+                //    Debug.WriteLine(i);
+                //}
             }
             else if (_currentIndex == ListSongs.Count - 1)
             {

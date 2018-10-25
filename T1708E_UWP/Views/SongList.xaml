@@ -11,10 +11,16 @@
 
     <Grid Loaded="OnActiveAsync">
         <Grid>
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="AliceBlue" Offset="0"/>
+                    <GradientStop Color="DeepSkyBlue" Offset="2"/>
+                </LinearGradientBrush>
+            </Grid.Background>
             <ListView SelectionChanged="MusicView_SelectionChanged" x:Name="MusicView" ItemsSource="{x:Bind ListSongs, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Header="My Music" FontSize="48px" Margin="30, 30, 0, 30">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="entity:Song">
-                        <Grid Tag="{Binding}" Height="150" Tapped="PlayCurrentSong" Background="AliceBlue">
+                        <Grid Tag="{Binding}" Height="150" Tapped="PlayCurrentSong">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="5*"/>
                                 <ColumnDefinition Width="4*"/>
