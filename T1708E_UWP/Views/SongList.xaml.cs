@@ -143,6 +143,8 @@ namespace T1708E_UWP.Views
             _currentIndex = this.MusicView.SelectedIndex;
             Uri songLink = new Uri(this.ListSongs[_currentIndex].link);
             this.myMediaElement.Source = songLink;
+            shuffle_index = _currentIndex;
+            played_songs.Add(shuffle_index);
             PlayButton.Icon = new SymbolIcon(Symbol.Pause);
             DispatcherTimerSetup();
             Debug.WriteLine(_currentIndex);
@@ -217,16 +219,19 @@ namespace T1708E_UWP.Views
                 int previousIndex;
                 if (lastIndex < 0)
                 {
+                    previousIndex = 0;
                     Uri songLink = new Uri(ListSongs[previousIndex].link);
                     this.myMediaElement.Source = songLink;
                     this.MusicView.SelectedIndex = previousIndex;
                     shuffle_index = previousIndex;
+                    _currentIndex = shuffle_index;
                 }
                 else
                 {
                     previousIndex = played_songs[lastIndex];
                     Uri songLink = new Uri(ListSongs[previousIndex].link);
                     shuffle_index = previousIndex;
+                    _currentIndex = shuffle_index;
                     this.myMediaElement.Source = songLink;
                     this.MusicView.SelectedIndex = shuffle_index;
                 }

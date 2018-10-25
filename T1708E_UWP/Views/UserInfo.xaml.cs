@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -44,6 +45,7 @@ namespace T1708E_UWP.Views
             var resp = client2.GetAsync(API_USER_INFOMATION).Result;
             var respContent = await resp.Content.ReadAsStringAsync();
             var user_info = JsonConvert.DeserializeObject<Member>(respContent);
+            this.avatar.ImageSource = new BitmapImage(new Uri(user_info.avatar));
             this.name.Text = user_info.firstName + " " + user_info.lastName;
             this.email.Text = user_info.email;
             this.phone.Text = user_info.phone;
@@ -60,7 +62,9 @@ namespace T1708E_UWP.Views
             StorageFile file_loginStatus = await storageFolder.GetFileAsync("loginStatus.txt");
             await file_token.DeleteAsync(StorageDeleteOption.Default);
             await file_loginStatus.DeleteAsync(StorageDeleteOption.Default);
-            this.Frame.Navigate(typeof(LoginForm));
+            Frame Login = new Frame();
+            Window.Current.Content = Login;
+            Login.Navigate(typeof(LoginForm));
         }
     }
 }

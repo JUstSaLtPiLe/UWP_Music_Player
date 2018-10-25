@@ -16,7 +16,7 @@
             </StackPanel>
             <Border BorderBrush= "White" BorderThickness="1" CornerRadius="300" Width="300" Height="300" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="180,0,0,0">
                 <Border.Background>
-                    <ImageBrush ImageSource="https://banner2.kisspng.com/20180410/jbq/kisspng-taiga-aisaka-toradora-drawing-siberian-tiger-mini-5acd6943652f49.6472818615234112674145.jpg"/>
+                    <ImageBrush x:Name="avatar"/>
                 </Border.Background>
             </Border>
             <StackPanel Orientation="Horizontal" Margin="80,0,0,0">
