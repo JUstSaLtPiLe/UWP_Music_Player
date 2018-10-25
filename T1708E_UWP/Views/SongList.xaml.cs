@@ -40,6 +40,7 @@ namespace T1708E_UWP.Views
         private List<int> played_songs = new List<int>();
         Random rnd_song_index = new Random();
         int shuffle_index;
+        int previous_shuffle_index;
         TimeSpan current_time;
         public SongList()
         {
@@ -123,6 +124,7 @@ namespace T1708E_UWP.Views
             {
                 do
                 {
+                    previous_shuffle_index = shuffle_index;
                     shuffle_index = rnd_song_index.Next(ListSongs.Count);
                 } while (played_songs.Contains(shuffle_index));
                 played_songs.Add(shuffle_index);
@@ -137,7 +139,7 @@ namespace T1708E_UWP.Views
 
         private void PlayCurrentSong(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            StackPanel currentPanel = sender as StackPanel;
+            Grid currentPanel = sender as Grid;
             _currentIndex = this.MusicView.SelectedIndex;
             Uri songLink = new Uri(this.ListSongs[_currentIndex].link);
             this.myMediaElement.Source = songLink;
@@ -178,7 +180,22 @@ namespace T1708E_UWP.Views
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            if (this.myMediaElement.Source == null)
+            if (this.myMediaElement.Source == null && shuffle == "shuffle")
+            {
+                do
+                {
+                    shuffle_index = rnd_song_index.Next(ListSongs.Count);
+                } while (played_songs.Contains(shuffle_index));
+                played_songs.Add(shuffle_index);
+                this.myMediaElement.Stop();
+                Uri songLink = new Uri(ListSongs[shuffle_index].link);
+                this.myMediaElement.Source = songLink;
+                _currentIndex = shuffle_index;
+                OnMouseDownPlayMedia();
+                this.MusicView.SelectedIndex = _currentIndex;
+                PlayButton.Icon = new SymbolIcon(Symbol.Pause);
+            }
+            else if (this.myMediaElement.Source == null)
             {
                 Uri songLink = new Uri(ListSongs[0].link);
                 this.myMediaElement.Source = songLink;
@@ -193,7 +210,30 @@ namespace T1708E_UWP.Views
 
         private void OnMouseDownPreviousMedia(object sender, RoutedEventArgs e)
         {
-            if (_currentIndex == 0)
+            if (_currentIndex != 0 && shuffle == "shuffle")
+            {
+                this.myMediaElement.Stop();
+                int lastIndex = played_songs.LastIndexOf(shuffle_index) - 1;
+                int previousIndex;
+                if (lastIndex < 0)
+                {
+                    Uri songLink = new Uri(ListSongs[previousIndex].link);
+                    this.myMediaElement.Source = songLink;
+                    this.MusicView.SelectedIndex = previousIndex;
+                    shuffle_index = previousIndex;
+                }
+                else
+                {
+                    previousIndex = played_songs[lastIndex];
+                    Uri songLink = new Uri(ListSongs[previousIndex].link);
+                    shuffle_index = previousIndex;
+                    this.myMediaElement.Source = songLink;
+                    this.MusicView.SelectedIndex = shuffle_index;
+                }
+                OnMouseDownPlayMedia();
+                PlayButton.Icon = new SymbolIcon(Symbol.Pause);
+            }
+            else if (_currentIndex == 0)
             {
                 this.myMediaElement.Stop();
                 Uri songLink = new Uri(ListSongs[ListSongs.Count - 1].link);
@@ -218,7 +258,26 @@ namespace T1708E_UWP.Views
 
         private void OnMouseDownNextMedia(object sender, RoutedEventArgs e)
         {
-            if (_currentIndex == ListSongs.Count - 1)
+            if (shuffle == "shuffle")
+            {
+                do
+                {
+                    previous_shuffle_index = shuffle_index;
+                    shuffle_index = rnd_song_index.Next(ListSongs.Count);
+                } while (played_songs.Contains(shuffle_index));
+                played_songs.Add(shuffle_index);
+                this.myMediaElement.Stop();
+                Uri songLink = new Uri(ListSongs[shuffle_index].link);
+                this.myMediaElement.Source = songLink;
+                _currentIndex = shuffle_index;
+                OnMouseDownPlayMedia();
+                this.MusicView.SelectedIndex = _currentIndex;
+                //foreach(int i in played_songs)
+                //{
+                //    Debug.WriteLine(i);
+                //}
+            }
+            else if (_currentIndex == ListSongs.Count - 1)
             {
                 this.myMediaElement.Stop();
                 Uri songLink = new Uri(ListSongs[0].link);
@@ -248,10 +307,10 @@ namespace T1708E_UWP.Views
 
         private void Repeat_Click(object sender, RoutedEventArgs e)
         {
-            this.myMediaElement.Stop();
+            Uri songLink = new Uri(ListSongs[_currentIndex].link);
+            this.myMediaElement.Source = songLink;
             this.myMediaElement.Play();
         }
-
         private async void shuffle_btn_Checked(object sender, RoutedEventArgs e)
         {
                 StorageFolder storageFolder = ApplicationData.Current.LocalFolder;

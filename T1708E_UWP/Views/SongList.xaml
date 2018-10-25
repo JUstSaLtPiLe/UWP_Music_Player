@@ -11,19 +11,27 @@
 
     <Grid Loaded="OnActiveAsync">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="5*"/>
-            </Grid.ColumnDefinitions>
-            <ListView SelectionChanged="MusicView_SelectionChanged" x:Name="MusicView" ItemsSource="{x:Bind ListSongs, Mode=TwoWay}" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Header="My Music" FontSize="48px" Margin="30, 30, 0, 30">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="AliceBlue" Offset="0"/>
+                    <GradientStop Color="DeepSkyBlue" Offset="2"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <ListView SelectionChanged="MusicView_SelectionChanged" x:Name="MusicView" ItemsSource="{x:Bind ListSongs, Mode=TwoWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Header="My Music" FontSize="48px" Margin="30, 30, 0, 30">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="entity:Song">
-                        <StackPanel Orientation="Horizontal" Tag="{Binding}" Height="150" Tapped="PlayCurrentSong" Background="AliceBlue">
-                            <Image Source="{x:Bind thumbnail}" Width="200" x:Name="SongThumbnail"/>
-                            <TextBlock Text="{x:Bind name}" x:Name="SongName" VerticalAlignment="Center" Margin="30,30,0,30"/>
-                            <TextBlock Text="{x:Bind author}" x:Name="SongAuthor"  HorizontalTextAlignment="Left" VerticalAlignment="Center" Margin="30,30,0,30"/>
-                            <TextBlock Text="{x:Bind singer}" x:Name="SongSinger"  HorizontalTextAlignment="Left" VerticalAlignment="Center" Margin="30,30,0,30"/>
-                        </StackPanel>
+                        <Grid Tag="{Binding}" Height="150" Tapped="PlayCurrentSong">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{x:Bind thumbnail}" x:Name="SongThumbnail" Grid.Column="0" HorizontalAlignment="Stretch"/>
+                            <TextBlock Text="{x:Bind name}" x:Name="SongName" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" Margin="30,30,0,30"/>
+                            <TextBlock Text="{x:Bind author}" x:Name="SongAuthor"  HorizontalTextAlignment="Left" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30,30,0,30"/>
+                            <TextBlock Text="{x:Bind singer}" x:Name="SongSinger"  HorizontalTextAlignment="Left" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30,30,0,30"/>
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.ItemContainerStyle>
@@ -41,7 +49,7 @@
             <AppBarButton Icon="Previous" Label="Previous" Click="OnMouseDownPreviousMedia" />
             <AppBarButton  Icon="Play" Label="Stop" Click="PlayButton_Click" x:Name="PlayButton"/>
             <AppBarButton Icon="Next" Label="Next" Click="OnMouseDownNextMedia"/>
-            <AppBarButton Icon="RepeatOne" Label="Shuffle" Click="Repeat_Click" />
+            <AppBarButton Icon="RepeatOne" Label="Repeat" Click="Repeat_Click" />
             <CommandBar.Content>
                 <Grid>
                     <Grid.ColumnDefinitions>
